@@ -6,19 +6,17 @@ import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
-PINS_CONFIG_FILE = os.getenv('PINS_CONFIG_FILE', None)
-assert PINS_CONFIG_FILE
-
 
 class PinManager(object):
 
-	def __init__(self):
-		self._gpio = GPIO
+	def __init__(self, config_file):
+		self.config_file = config_file
 		self._load_config()
+		self._gpio = GPIO
 		self._initialize_pins()
 
 	def _load_config(self):
-		with open(PINS_CONFIG_FILE) as file_data:
+		with open(self.config_file) as file_data:
 			self.pin_config = yaml.safe_load(file_data)
 
 	def _setup_pin(self, number, mode, initial, resistor):
