@@ -56,3 +56,5 @@ target/
 # Sublime Project Files
 *.sublime-project
 *.sublime-workspace
+
+test.yml
