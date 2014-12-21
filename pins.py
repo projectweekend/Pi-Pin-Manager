@@ -41,7 +41,7 @@ class PinManager(object):
 			resistor = pin_options.get('resistor', None)
 			self._setup_pin(pin_num, pin_options['mode'], initial, resistor)
 
-	def read_config(self, pin_number):
+	def get_config(self, pin_number):
 		try:
 			return self.pin_config[pin_number].copy()
 		except KeyError:
@@ -49,11 +49,11 @@ class PinManager(object):
 			raise PinNotDefinedError(message)
 
 	def read(self, pin_number):
-		self.read_config(pin_number)
+		self.get_config(pin_number)
 		return self._gpio.input(pin_number)
 
 	def write(self, pin_number, value):
-		config = self.read_config(pin_number)
+		config = self.get_config(pin_number)
 		if config['mode'] != 'OUT':
 			message = "Pin {0} not set as 'OUT' in '{1}'".format(pin_number, self.config_file)
 			raise PinConfigurationError(message)
