@@ -2,10 +2,6 @@ import yaml
 import RPi.GPIO as GPIO
 
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
-
-
 class PinNotDefinedError(Exception):
 	pass
 
@@ -19,8 +15,13 @@ class PinManager(object):
 	def __init__(self, config_file):
 		self.config_file = config_file
 		self._load_config()
-		self._gpio = GPIO
+		self._initialize_gpio()
 		self._initialize_pins()
+
+	def _initialize_gpio(self):
+		GPIO.setmode(GPIO.BCM)
+		GPIO.setwarnings(False)
+		self._gpio = GPIO
 
 	def _load_config(self):
 		with open(self.config_file) as file_data:
