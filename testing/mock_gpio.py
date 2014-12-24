@@ -10,6 +10,9 @@ class MockGPIO(object):
 		self.PUD_DOWN = 'PUD_DOWN'
 		self.pin_map = {}
 
+	def setmode(self, mode):
+		pass
+
 	def setwarnings(self, input):
 		pass
 
