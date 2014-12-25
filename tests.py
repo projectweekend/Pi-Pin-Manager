@@ -11,3 +11,7 @@ class PinManagerTests(unittest.TestCase):
 
 	def test_pin_manager(self):
 		manager = PinManager()
+
+
+if __name__ == '__main__':
+    unittest.main()
