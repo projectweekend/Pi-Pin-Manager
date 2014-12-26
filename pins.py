@@ -18,8 +18,9 @@ class PinConfigurationError(Exception):
 
 class PinManager(object):
 
-	def __init__(self, config_file):
+	def __init__(self, config_file, handler_file):
 		self.config_file = config_file
+		self.handler_file = handler_file
 		self._load_config()
 		self._initialize_gpio()
 		self._initialize_pins()
