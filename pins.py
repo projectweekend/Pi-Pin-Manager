@@ -1,5 +1,11 @@
 import yaml
-import RPi.GPIO as GPIO
+
+# This substitutes a mock library for testing when not running on a Raspberry Pi
+try:
+	import RPi.GPIO as GPIO
+except ImportError:
+	from testing.mock_gpio import MockGPIO
+	GPIO = MockGPIO()
 
 
 class PinNotDefinedError(Exception):
