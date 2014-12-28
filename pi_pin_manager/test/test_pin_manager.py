@@ -1,6 +1,6 @@
 import unittest
 
-from pins import PinManager, PinConfigurationError, PinNotDefinedError
+from pi_pin_manager import PinManager, PinConfigurationError, PinNotDefinedError
 
 
 class PinManagerTests(unittest.TestCase):
