@@ -55,3 +55,10 @@ result = pins.write(19, 1)
 # Get configuration for a pin
 result = pins.get_config(23)
 ```
+
+**Exceptions:**
+
+This package may raise the following custom exceptions:
+
+* `PinNotDefinedError` - This is raised when attempting to `read` or `write` to a pin that is not defined in the configuration file.
+* `PinConfigurationError` - This is raised when attempting to perform an action on a pin that does not match its configuration. For example, trying to `write` to a pin not defined as `mode: OUT`.
