@@ -1,11 +1,5 @@
 import yaml
-
-# This substitutes a mock library for testing when not running on a Raspberry Pi
-try:
-	import RPi.GPIO as GPIO
-except ImportError:
-	from tests.mock_gpio import MockGPIO
-	GPIO = MockGPIO()
+import RPi.GPIO as GPIO
 
 
 class PinNotDefinedError(Exception):
@@ -18,9 +12,9 @@ class PinConfigurationError(Exception):
 
 class PinManager(object):
 
-	def __init__(self, config_file, handler_file):
+	def __init__(self, config_file):
 		self.config_file = config_file
-		self.handler_file = handler_file
+		# self.handler_file = handler_file
 		self._load_config()
 		self._initialize_gpio()
 		self._initialize_pins()
