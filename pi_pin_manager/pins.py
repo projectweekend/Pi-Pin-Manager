@@ -4,7 +4,7 @@ import yaml
 try:
 	import RPi.GPIO as GPIO
 except ImportError:
-	from testing.mock_gpio import MockGPIO
+	from tests.mock_gpio import MockGPIO
 	GPIO = MockGPIO()
 
 
