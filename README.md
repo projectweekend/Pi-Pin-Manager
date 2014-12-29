@@ -29,9 +29,9 @@ A config file, written in [YAML](http://en.wikipedia.org/wiki/YAML), is used to 
 * `mode` - This controls whether the pin will be used for input or output. Accepted values are: `IN`, `OUT`. (Required)
 * `initial` - This controls the starting value of the pin. Accepted values are: `LOW`, `HIGH`. (Optional - defaults to `LOW`)
 * `resistor` - This controls the software defined pull up/pull down resistor available in the Broadcom SOC. Accepted values are: `PUD_UP`, `PUD_DOWN`. (Optional - defaults to none)
-* `event` - Work in progress... This is used in combination with a pin set to input mode (`mode: IN`). Accepted values are: `RISING`, `FALLING`, `BOTH`.
-* `handler` - Work in progress... This is used in combination with an `event` to designate a function to call when an `event` happens. This value should correspond to a function defined in your handler class.
-* `bounce` - Work in progress... This can be used when an `event` is defined to prevent multiple `handler` calls being fired accidentally. The value is the number of milliseconds to wait before detecting another `event`.
+* `event` - This is used in combination with a pin set to input mode (`mode: IN`). Accepted values are: `RISING`, `FALLING`, `BOTH`.
+* `handler` - This is used in combination with an `event` to designate a function to call when an `event` happens. This value should correspond to a function defined in your handler class.
+* `bounce` - This can be used when an `event` is defined to prevent multiple `handler` calls being fired accidentally. The value is the number of milliseconds to wait before detecting another `event`.
 
 **Note:**
 
