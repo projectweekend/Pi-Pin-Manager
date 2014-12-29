@@ -9,7 +9,7 @@ setup(
     url='http://pypi.python.org/pypi/Pi-Pin-Manager/',
     license='LICENSE.txt',
     description='Manage RPi.GPIO pin definition and initialization with a config file.',
-    long_description=open('README.txt').read(),
+    long_description=open('README.md').read(),
     install_requires=[
         "PyYAML == 3.11",
         "RPi.GPIO == 0.5.8",
