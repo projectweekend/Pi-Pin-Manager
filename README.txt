@@ -21,6 +21,7 @@ A config file, written in [YAML](http://en.wikipedia.org/wiki/YAML), is used to 
 24:
   mode: IN
   event: RISING
+  handler: do_something
   bounce: 200
 ```
 
@@ -37,7 +38,7 @@ A config file, written in [YAML](http://en.wikipedia.org/wiki/YAML), is used to 
 For full documentation about available GPIO input pin configurations see the [documentation](http://sourceforge.net/p/raspberry-gpio-python/wiki/Examples/).
 
 
-### Use It
+### Use It (No Events)
 
 ```python
 from pi_pin_manager import PinManager
@@ -54,6 +55,22 @@ result = pins.write(19, 1)
 
 # Get configuration for a pin
 result = pins.get_config(23)
+```
+
+### Use It (With Events)
+
+```python
+from pi_pin_manager import PinManager
+
+
+class EventHandlers(object):
+
+    def do_something(self, pin_number, event):
+        # Whatever you want to trigger when an event is detected goes here
+        print('Event "{0}" on pin {1}'.format(event, pin_number))
+
+
+pins = PinManager(config_file='path/to/config/file.yml', event_handlers=EventHandlers)
 ```
 
 **Exceptions:**
