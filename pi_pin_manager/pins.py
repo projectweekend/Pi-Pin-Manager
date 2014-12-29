@@ -12,9 +12,9 @@ class PinConfigurationError(Exception):
 
 class PinManager(object):
 
-	def __init__(self, config_file):
+	def __init__(self, config_file, event_handlers=None):
 		self.config_file = config_file
-		# self.handler_file = handler_file
+		self.event_handlers = event_handlers
 		self._load_config()
 		self._initialize_gpio()
 		self._initialize_pins()
@@ -42,6 +42,14 @@ class PinManager(object):
 			initial = pin_options.get('initial', 'LOW')
 			resistor = pin_options.get('resistor', None)
 			self._setup_pin(pin_num, pin_options['mode'], initial, resistor)
+
+			event = pin_options.get('event', None)
+			handler = pin_options.get('handler', None)
+			bounce = pin_options.get('bounce', 0)
+			if event and handler:
+				event = self._gpio.__getattribute__(event)
+				handler = self.event_handlers.__getattribute__(handler)
+				self._gpio.add_event_detect(pin_num, event, callback=handler, bouncetime=bounce)
 
 	def get_config(self, pin_number):
 		try:
