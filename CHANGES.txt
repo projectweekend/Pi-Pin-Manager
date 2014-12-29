@@ -1,2 +1,3 @@
 v0.0.1, 2014-12-27 -- Initial release.
 v0.0.2, 2014-12-27 -- Rename README.md to README.txt
+v0.0.5, 2014-12-29 -- General clean up
