@@ -51,7 +51,13 @@ pins = PinManager(config_file='path/to/config/file.yml')
 result = pins.read(18)
 
 # Write to a pin
-result = pins.write(19, 1)
+pins.write(19, 1)
+
+# Turn pin on
+pins.on(19)
+
+# Turn pin off
+pins.off(19)
 
 # Get configuration for a pin
 result = pins.get_config(23)

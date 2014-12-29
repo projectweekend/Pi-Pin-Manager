@@ -68,3 +68,9 @@ class PinManager(object):
 			message = "Pin {0} not set as 'OUT' in '{1}'".format(pin_number, self.config_file)
 			raise PinConfigurationError(message)
 		self._gpio.output(pin_number, value)
+
+	def on(self, pin_number):
+		self.write(pin_number, 1)
+
+	def off(self, pin_number):
+		self.write(pin_number, 0)
