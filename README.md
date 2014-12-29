@@ -59,6 +59,8 @@ result = pins.get_config(23)
 
 ### Use It (With Events)
 
+If an `event` and `handler` have been defined for a pin in the config file, then you must also provide a class that contains the callbacks to execute. Each method you add to this class should match the name of a `handler` value. Based on the example code below, `handler: do_something` is expected in the config file `path/to/config/file.yml`.
+
 ```python
 from pi_pin_manager import PinManager
 
@@ -70,7 +72,7 @@ class EventHandlers(object):
         print('Event "{0}" on pin {1}'.format(event, pin_number))
 
 
-pins = PinManager(config_file='path/to/config/file.yml', event_handlers=EventHandlers)
+pins = PinManager(config_file='path/to/config/file.yml', event_handlers=EventHandlers())
 ```
 
 **Exceptions:**
