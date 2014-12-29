@@ -1,4 +1,4 @@
-This utility exposes a helper class that wraps the [RPi.GPIO]() library so you can define and initialize GPIO pins using a cofiguration file.
+Boilerplate code is annoying and sometimes there can be a lot of it working with [Raspberry Pi GPIO](https://pypi.python.org/pypi/RPi.GPIO). I got tired of setting the board mode and declaring GPIO channels in every script so I made a library to do it using a config file instead. In addition to getting rid of the boilerplate, **Pi-Pin-Manager** has the added benefit of pulling the configuration out of the code. This means you can modify any pin's behavior without ever touching a Python file or having to redeploy your program.
 
 
 ### Install It
@@ -67,9 +67,9 @@ from pi_pin_manager import PinManager
 
 class EventHandlers(object):
 
-    def do_something(self, pin_number, event):
+    def do_something(self, pin_number):
         # Whatever you want to trigger when an event is detected goes here
-        print('Event "{0}" on pin {1}'.format(event, pin_number))
+        print('pin {0}'.format(pin_number))
 
 
 pins = PinManager(config_file='path/to/config/file.yml', event_handlers=EventHandlers())
