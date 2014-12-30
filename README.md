@@ -81,7 +81,7 @@ class EventHandlers(object):
 pins = PinManager(config_file='path/to/config/file.yml', event_handlers=EventHandlers())
 ```
 
-**Exceptions:**
+### Exceptions
 
 This package may raise the following custom exceptions:
 
