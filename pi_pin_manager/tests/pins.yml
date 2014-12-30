@@ -1,0 +1,8 @@
+18:
+    mode: OUT
+23:
+    mode: IN
+    resistor: PUD_UP
+    event: FALLING
+    handler: do_something
+    bounce: 200
