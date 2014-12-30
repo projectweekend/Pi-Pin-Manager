@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Pi Pin Manager : Setup Raspberry Pi GPIO pins using a configuration file, not boilerplate">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Pi Pin Manager</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/projectweekend/Pi-Pin-Manager">View on GitHub</a>
+
+          <h1 id="project_title">Pi Pin Manager</h1>
+          <h2 id="project_tagline">Setup Raspberry Pi GPIO pins using a configuration file, not boilerplate</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/projectweekend/Pi-Pin-Manager/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/projectweekend/Pi-Pin-Manager/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p>Boilerplate code is annoying and sometimes there can be a lot of it working with <a href="https://pypi.python.org/pypi/RPi.GPIO">Raspberry Pi GPIO</a>. I got tired of setting the board mode and declaring GPIO channels in every script so I made a library that uses a config file instead. In addition to getting rid of the boilerplate, <strong>Pi-Pin-Manager</strong> has the added benefit of pulling the configuration out of the code. This means you can modify any pin's behavior without ever touching a Python file or having to redeploy your program.</p>
+
+<h3>
+<a id="install-it" class="anchor" href="#install-it" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install It</h3>
+
+<pre><code>pip install Pi-Pin-Manager
+</code></pre>
+
+<h3>
+<a id="configure-it" class="anchor" href="#configure-it" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configure It</h3>
+
+<p>A config file, written in <a href="http://en.wikipedia.org/wiki/YAML">YAML</a>, is used to define the initial pin setup. If a pin is not defined here it will not be available to the <code>PinManager</code>. The following snippet shows an example configuration file:</p>
+
+<div class="highlight highlight-yaml"><pre><span class="pl-s1"><span class="pl-ent">18:</span></span>
+  <span class="pl-s1"><span class="pl-ent">mode:</span> <span class="pl-s1">OUT</span></span>
+  <span class="pl-s1"><span class="pl-ent">initial:</span> <span class="pl-s1">HIGH</span></span>
+<span class="pl-s1"><span class="pl-ent">23:</span></span>
+  <span class="pl-s1"><span class="pl-ent">mode:</span> <span class="pl-s1">OUT</span></span>
+  <span class="pl-s1"><span class="pl-ent">initial:</span> <span class="pl-s1">LOW</span></span>
+<span class="pl-s1"><span class="pl-ent">24:</span></span>
+  <span class="pl-s1"><span class="pl-ent">mode:</span> <span class="pl-s1">IN</span></span>
+  <span class="pl-s1"><span class="pl-ent">event:</span> <span class="pl-s1">RISING</span></span>
+  <span class="pl-s1"><span class="pl-ent">handler:</span> <span class="pl-s1">do_something</span></span>
+  <span class="pl-c1"><span class="pl-ent">bounce:</span> 200</span></pre></div>
+
+<ul>
+<li>Add a numbered element for each pin to enable</li>
+<li>
+<code>mode</code> - This controls whether the pin will be used for input or output. Accepted values are: <code>IN</code>, <code>OUT</code>. (Required)</li>
+<li>
+<code>initial</code> - This controls the starting value of the pin. Accepted values are: <code>LOW</code>, <code>HIGH</code>. (Optional - defaults to <code>LOW</code>)</li>
+<li>
+<code>resistor</code> - This controls the software defined pull up/pull down resistor available in the Broadcom SOC. Accepted values are: <code>PUD_UP</code>, <code>PUD_DOWN</code>. (Optional - defaults to none)</li>
+<li>
+<code>event</code> - This is used in combination with a pin set to input mode (<code>mode: IN</code>). Accepted values are: <code>RISING</code>, <code>FALLING</code>, <code>BOTH</code>.</li>
+<li>
+<code>handler</code> - This is used in combination with an <code>event</code> to designate a function to call when an <code>event</code> happens. This value should correspond to a function defined in your handler class.</li>
+<li>
+<code>bounce</code> - This can be used when an <code>event</code> is defined to prevent multiple <code>handler</code> calls being fired accidentally. The value is the number of milliseconds to wait before detecting another <code>event</code>.</li>
+</ul>
+
+<p><strong>Note:</strong></p>
+
+<p>For full documentation about available GPIO input pin configurations see the <a href="http://sourceforge.net/p/raspberry-gpio-python/wiki/Examples/">documentation</a>.</p>
+
+<h3>
+<a id="use-it-no-events" class="anchor" href="#use-it-no-events" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use It (No Events)</h3>
+
+<div class="highlight highlight-python"><pre><span class="pl-k">from</span> pi_pin_manager <span class="pl-k">import</span> PinManager
+
+
+pins <span class="pl-k">=</span> PinManager(<span class="pl-vpf">config_file</span><span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>path/to/config/file.yml<span class="pl-pds">'</span></span>)
+
+
+<span class="pl-c"># Read a pin</span>
+result <span class="pl-k">=</span> pins.read(<span class="pl-c1">18</span>)
+
+<span class="pl-c"># Write to a pin</span>
+pins.write(<span class="pl-c1">19</span>, <span class="pl-c1">1</span>)
+
+<span class="pl-c"># Turn pin on</span>
+pins.on(<span class="pl-c1">19</span>)
+
+<span class="pl-c"># Turn pin off</span>
+pins.off(<span class="pl-c1">19</span>)
+
+<span class="pl-c"># Get configuration for a pin</span>
+result <span class="pl-k">=</span> pins.get_config(<span class="pl-c1">23</span>)</pre></div>
+
+<h3>
+<a id="use-it-with-events" class="anchor" href="#use-it-with-events" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use It (With Events)</h3>
+
+<p>If an <code>event</code> and <code>handler</code> have been defined for a pin in the config file, then you must also provide a class that contains the callbacks to execute. Each method you add to this class should match the name of a <code>handler</code> value. Based on the example code below, <code>handler: do_something</code> is expected in the config file <code>path/to/config/file.yml</code>.</p>
+
+<div class="highlight highlight-python"><pre><span class="pl-k">from</span> pi_pin_manager <span class="pl-k">import</span> PinManager
+
+
+<span class="pl-st">class</span> <span class="pl-en">EventHandlers</span>(<span class="pl-e"><span class="pl-s3">object</span></span>):
+
+    <span class="pl-st">def</span> <span class="pl-en">do_something</span>(<span class="pl-vpf">self</span>, <span class="pl-vpf">pin_number</span>):
+        <span class="pl-c"># Whatever you want to trigger when an event is detected goes here</span>
+        <span class="pl-k">print</span>(<span class="pl-s1"><span class="pl-pds">'</span>pin <span class="pl-c1">{0}</span><span class="pl-pds">'</span></span>.format(pin_number))
+
+
+pins <span class="pl-k">=</span> PinManager(<span class="pl-vpf">config_file</span><span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>path/to/config/file.yml<span class="pl-pds">'</span></span>, <span class="pl-vpf">event_handlers</span><span class="pl-k">=</span>EventHandlers())</pre></div>
+
+<h3>
+<a id="exceptions" class="anchor" href="#exceptions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Exceptions</h3>
+
+<p>This package may raise the following custom exceptions:</p>
+
+<ul>
+<li>
+<code>PinNotDefinedError</code> - This is raised when attempting to <code>read</code> or <code>write</code> to a pin that is not defined in the configuration file.</li>
+<li>
+<code>PinConfigurationError</code> - This is raised when attempting to perform an action on a pin that does not match its configuration. For example, trying to <code>write</code> to a pin not defined as <code>mode: OUT</code>.</li>
+</ul>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Pi Pin Manager maintained by <a href="https://github.com/projectweekend">projectweekend</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
