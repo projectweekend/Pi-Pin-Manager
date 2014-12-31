@@ -73,3 +73,8 @@ class PinManager(object):
 
     def off(self, pin_number):
         self.write(pin_number, 0)
+
+    def cleanup(self, pin_number=None):
+        if pin_number:
+            return self._gpio.cleanup(pin_number)
+        return self._gpio.cleanup()

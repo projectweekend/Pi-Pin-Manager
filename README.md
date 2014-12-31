@@ -30,7 +30,7 @@ A config file, written in [YAML](http://en.wikipedia.org/wiki/YAML), is used to 
 * `initial` - This controls the starting value of the pin. Accepted values are: `LOW`, `HIGH`. (Optional - defaults to `LOW`)
 * `resistor` - This controls the software defined pull up/pull down resistor available in the Broadcom SOC. Accepted values are: `PUD_UP`, `PUD_DOWN`. (Optional - defaults to none)
 * `event` - This is used in combination with a pin set to input mode (`mode: IN`). Accepted values are: `RISING`, `FALLING`, `BOTH`.
-* `handler` - This is used in combination with an `event` to designate a function to call when an `event` happens. This value should correspond to a function defined in your handler class.
+* `handler` - This is used in combination with an `event` to designate a function to call when an `event` happens. This value should correspond to a method defined in your handler class.
 * `bounce` - This can be used when an `event` is defined to prevent multiple `handler` calls being fired accidentally. The value is the number of milliseconds to wait before detecting another `event`.
 
 **Note:**
@@ -38,7 +38,7 @@ A config file, written in [YAML](http://en.wikipedia.org/wiki/YAML), is used to 
 For full documentation about available GPIO input pin configurations see the [documentation](http://sourceforge.net/p/raspberry-gpio-python/wiki/Examples/).
 
 
-### Use It (No Events)
+### Use It (No Event)
 
 ```python
 from pi_pin_manager import PinManager
@@ -61,9 +61,15 @@ pins.off(19)
 
 # Get configuration for a pin
 result = pins.get_config(23)
+
+# Cleanup GPIO on single pin
+pins.cleanup(18)
+
+# Cleanup GPIO on all pins
+pins.cleanup()
 ```
 
-### Use It (With Events)
+### Use It (With Event)
 
 If an `event` and `handler` have been defined for a pin in the config file, then you must also provide a class that contains the callbacks to execute. Each method you add to this class should match the name of a `handler` value. Based on the example code below, `handler: do_something` is expected in the config file `path/to/config/file.yml`.
 
