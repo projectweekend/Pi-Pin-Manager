@@ -67,7 +67,7 @@
 <li>
 <code>event</code> - This is used in combination with a pin set to input mode (<code>mode: IN</code>). Accepted values are: <code>RISING</code>, <code>FALLING</code>, <code>BOTH</code>.</li>
 <li>
-<code>handler</code> - This is used in combination with an <code>event</code> to designate a function to call when an <code>event</code> happens. This value should correspond to a function defined in your handler class.</li>
+<code>handler</code> - This is used in combination with an <code>event</code> to designate a function to call when an <code>event</code> happens. This value should correspond to a method defined in your handler class.</li>
 <li>
 <code>bounce</code> - This can be used when an <code>event</code> is defined to prevent multiple <code>handler</code> calls being fired accidentally. The value is the number of milliseconds to wait before detecting another <code>event</code>.</li>
 </ul>
@@ -77,7 +77,7 @@
 <p>For full documentation about available GPIO input pin configurations see the <a href="http://sourceforge.net/p/raspberry-gpio-python/wiki/Examples/">documentation</a>.</p>
 
 <h3>
-<a id="use-it-no-events" class="anchor" href="#use-it-no-events" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use It (No Events)</h3>
+<a id="use-it-no-event" class="anchor" href="#use-it-no-event" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use It (No Event)</h3>
 
 <div class="highlight highlight-python"><pre><span class="pl-k">from</span> pi_pin_manager <span class="pl-k">import</span> PinManager
 
@@ -98,10 +98,16 @@ pins.on(<span class="pl-c1">19</span>)
 pins.off(<span class="pl-c1">19</span>)
 
 <span class="pl-c"># Get configuration for a pin</span>
-result <span class="pl-k">=</span> pins.get_config(<span class="pl-c1">23</span>)</pre></div>
+result <span class="pl-k">=</span> pins.get_config(<span class="pl-c1">23</span>)
+
+<span class="pl-c"># Cleanup GPIO on single pin</span>
+pins.cleanup(<span class="pl-c1">18</span>)
+
+<span class="pl-c"># Cleanup GPIO on all pins</span>
+pins.cleanup()</pre></div>
 
 <h3>
-<a id="use-it-with-events" class="anchor" href="#use-it-with-events" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use It (With Events)</h3>
+<a id="use-it-with-event" class="anchor" href="#use-it-with-event" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use It (With Event)</h3>
 
 <p>If an <code>event</code> and <code>handler</code> have been defined for a pin in the config file, then you must also provide a class that contains the callbacks to execute. Each method you add to this class should match the name of a <code>handler</code> value. Based on the example code below, <code>handler: do_something</code> is expected in the config file <code>path/to/config/file.yml</code>.</p>
 
