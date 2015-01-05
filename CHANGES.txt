@@ -1,8 +1,9 @@
 v0.0.1, 2014-12-27 -- Initial release.
-v0.0.2, 2014-12-27 -- Rename README.md to README.txt
-v0.0.5, 2014-12-29 -- General clean up
-v0.0.6, 2014-12-29 -- Trying to get this README.txt to display correctly
-v0.0.7, 2014-12-29 -- Add on/off methods
-v0.0.8, 2014-12-30 -- Refactor pin setup method and add test script
-v0.0.9, 2014-12-31 -- Add cleanup method and fix some documentation
-v0.0.10, 2015-01-05 -- Add get_config for all pins
+v0.0.2, 2014-12-27 -- Rename README.md to README.txt.
+v0.0.5, 2014-12-29 -- General clean up.
+v0.0.6, 2014-12-29 -- Trying to get this README.txt to display correctly.
+v0.0.7, 2014-12-29 -- Add on/off methods.
+v0.0.8, 2014-12-30 -- Refactor pin setup method and add test script.
+v0.0.9, 2014-12-31 -- Add cleanup method and fix some documentation.
+v0.0.10, 2015-01-05 -- Add get_config for all pins.
+v0.0.11, 2015-01-05 -- Update project page URL.

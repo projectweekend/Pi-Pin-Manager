@@ -2,11 +2,11 @@ from distutils.core import setup
 
 setup(
     name='Pi-Pin-Manager',
-    version='0.0.10',
+    version='0.0.11',
     author='Brian Hines',
     author_email='brian@projectweekend.net',
     packages=['pi_pin_manager'],
-    url='http://pypi.python.org/pypi/Pi-Pin-Manager/',
+    url='http://projectweekend.github.io/Pi-Pin-Manager/',
     license='LICENSE.txt',
     description='Setup Raspberry Pi GPIO pins using a configuration file, not boilerplate.',
     long_description=open('README.txt').read(),
