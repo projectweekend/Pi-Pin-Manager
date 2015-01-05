@@ -50,12 +50,14 @@ class PinManager(object):
         for pin_num, pin_options in self.pin_config.items():
             self._setup_pin(pin_num, pin_options)
 
-    def get_config(self, pin_number):
-        try:
-            return self.pin_config[pin_number].copy()
-        except KeyError:
-            message = "Pin {0} not defined in '{1}'".format(pin_number, self.config_file)
-            raise PinNotDefinedError(message)
+    def get_config(self, pin_number=None):
+        if pin_number:
+            try:
+                return self.pin_config[pin_number].copy()
+            except KeyError:
+                message = "Pin {0} not defined in '{1}'".format(pin_number, self.config_file)
+                raise PinNotDefinedError(message)
+        return self.pin_config.copy()
 
     def read(self, pin_number):
         self.get_config(pin_number)

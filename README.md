@@ -62,6 +62,9 @@ pins.off(19)
 # Get configuration for a pin
 result = pins.get_config(23)
 
+# Get configuration for all pins
+result = pins.get_config()
+
 # Cleanup GPIO on single pin
 pins.cleanup(18)
 
