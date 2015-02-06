@@ -68,7 +68,11 @@ For full documentation about available GPIO input pin configurations see the [do
 from pi_pin_manager import PinManager
 
 
+# With configuration file
 pins = PinManager(config_file='path/to/config/file.yml')
+
+# With configuration dictionary, assuming my_config_dictionary was defined
+# pins = PinManager(config_dict=my_config_dictionary)
 
 
 # Read a pin
@@ -112,6 +116,9 @@ class EventHandlers(object):
 
 
 pins = PinManager(config_file='path/to/config/file.yml', event_handlers=EventHandlers())
+
+# With configuration dictionary, assuming my_config_dictionary was defined
+# pins = PinManager(config_dict=my_config_dictionary, event_handlers=EventHandlers())
 ```
 
 ### Exceptions
