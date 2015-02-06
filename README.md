@@ -1,17 +1,17 @@
 Boilerplate code is annoying and sometimes there can be a lot of it working with [Raspberry Pi GPIO](https://pypi.python.org/pypi/RPi.GPIO). I got tired of setting the board mode and declaring GPIO channels in every script so I made a library that uses a config file instead. In addition to getting rid of the boilerplate, **Pi-Pin-Manager** has the added benefit of pulling the configuration out of the code. This means you can modify any pin's behavior without ever touching a Python file or having to redeploy your program.
 
 
-### Install It
+### Install it
 
 ```
 pip install Pi-Pin-Manager
 ```
 
-### Configure It
+### Configure it
 
 When creating an instance of `pi_pin_manager.PinManager`, there are two ways you can supply pin configuration information: A config file, written in [YAML](http://en.wikipedia.org/wiki/YAML) or a dictionary. If a pin is not defined at this step it will not be available to the `PinManager`.
 
-#### Configure with file
+#### With file
 
 The following snippet shows an example configuration file:
 
@@ -29,7 +29,7 @@ The following snippet shows an example configuration file:
   bounce: 200
 ```
 
-#### Configure with dictionary
+#### With dictionary
 
 This snippet shows the same configuration example above as a dictionary:
 
@@ -62,7 +62,7 @@ config = {
 For full documentation about available GPIO input pin configurations see the [documentation](http://sourceforge.net/p/raspberry-gpio-python/wiki/Examples/).
 
 
-### Use It (No Event)
+### Use it (no event)
 
 ```python
 from pi_pin_manager import PinManager
@@ -96,7 +96,7 @@ pins.cleanup(18)
 pins.cleanup()
 ```
 
-### Use It (With Event)
+### Use it (with event)
 
 If an `event` and `handler` have been defined for a pin in the config file, then you must also provide a class that contains the callbacks to execute. Each method you add to this class should match the name of a `handler` value. Based on the example code below, `handler: do_something` is expected in the config file `path/to/config/file.yml`.
 
