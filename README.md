@@ -9,7 +9,11 @@ pip install Pi-Pin-Manager
 
 ### Configure It
 
-A config file, written in [YAML](http://en.wikipedia.org/wiki/YAML), is used to define the initial pin setup. If a pin is not defined here it will not be available to the `PinManager`. The following snippet shows an example configuration file:
+When creating an instance of `pi_pin_manager.PinManager`, there are two ways you can supply pin configuration information: A config file, written in [YAML](http://en.wikipedia.org/wiki/YAML) or a dictionary. If a pin is not defined at this step it will not be available to the `PinManager`.
+
+#### Configure with file
+
+The following snippet shows an example configuration file:
 
 ```yaml
 18:
@@ -25,6 +29,28 @@ A config file, written in [YAML](http://en.wikipedia.org/wiki/YAML), is used to 
   bounce: 200
 ```
 
+#### Configure with dictionary
+
+This snippet shows the same configuration example above as a dictionary:
+
+```python
+config = {
+  18:
+    'mode': 'OUT'
+    initial: 'HIGH'
+  23:
+    'mode': 'OUT'
+    initial: 'LOW'
+  24:
+    'mode': 'IN'
+    'event': 'RISING'
+    'handler': 'do_something'
+    'bounce': 200
+}
+```
+
+#### Notes
+
 * Add a numbered element for each pin to enable
 * `mode` - This controls whether the pin will be used for input or output. Accepted values are: `IN`, `OUT`. (Required)
 * `initial` - This controls the starting value of the pin. Accepted values are: `LOW`, `HIGH`. (Optional - defaults to `LOW`)
@@ -32,8 +58,6 @@ A config file, written in [YAML](http://en.wikipedia.org/wiki/YAML), is used to 
 * `event` - This is used in combination with a pin set to input mode (`mode: IN`). Accepted values are: `RISING`, `FALLING`, `BOTH`.
 * `handler` - This is used in combination with an `event` to designate a function to call when an `event` happens. This value should correspond to a method defined in your handler class.
 * `bounce` - This can be used when an `event` is defined to prevent multiple `handler` calls being fired accidentally. The value is the number of milliseconds to wait before detecting another `event`.
-
-**Note:**
 
 For full documentation about available GPIO input pin configurations see the [documentation](http://sourceforge.net/p/raspberry-gpio-python/wiki/Examples/).
 
