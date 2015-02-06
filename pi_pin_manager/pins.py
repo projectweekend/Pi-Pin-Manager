@@ -12,10 +12,11 @@ class PinConfigurationError(Exception):
 
 class PinManager(object):
 
-    def __init__(self, config_file, event_handlers=None):
+    def __init__(self, config_file=None, config_dict=None, event_handlers=None):
         self.config_file = config_file
+        self.config_dict = config_dict
         self.event_handlers = event_handlers
-        self._load_config()
+        self._load_pin_config()
         self._initialize_gpio()
         self._initialize_pins()
 
@@ -24,9 +25,24 @@ class PinManager(object):
         GPIO.setwarnings(False)
         self._gpio = GPIO
 
-    def _load_config(self):
+    def _load_pin_config(self):
+        if not self.config_file and not self.config_dict:
+            message = "PinManager requires either a 'config_file' or 'config_dict' parameter"
+            raise PinConfigurationError(message)
+        if self.config_file:
+            self._configure_from_file()
+        else:
+            self._configure_from_dict()
+
+    def _configure_from_file(self):
         with open(self.config_file) as file_data:
             self.pin_config = yaml.safe_load(file_data)
+
+    def _configure_from_dict(self):
+        if type(self.config_dict) != 'dict':
+            message = "'config_dict' parameter must be a dictionary"
+            raise PinConfigurationError(message)
+        self.pin_config = self.config_dict
 
     def _setup_pin(self, number, options):
         mode = self._gpio.__getattribute__(options['mode'])
@@ -55,7 +71,7 @@ class PinManager(object):
             try:
                 return self.pin_config[pin_number].copy()
             except KeyError:
-                message = "Pin {0} not defined in '{1}'".format(pin_number, self.config_file)
+                message = "Pin {0} not defined in configuration".format(pin_number)
                 raise PinNotDefinedError(message)
         return self.pin_config.copy()
 
@@ -66,7 +82,7 @@ class PinManager(object):
     def write(self, pin_number, value):
         config = self.get_config(pin_number)
         if config['mode'] != 'OUT':
-            message = "Pin {0} not set as 'OUT' in '{1}'".format(pin_number, self.config_file)
+            message = "Pin {0} not set as 'OUT' in configuration".format(pin_number)
             raise PinConfigurationError(message)
         self._gpio.output(pin_number, value)
 
