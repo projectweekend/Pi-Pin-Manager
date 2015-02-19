@@ -110,15 +110,19 @@ from pi_pin_manager import PinManager
 
 class EventHandlers(object):
 
+    def __init__(self, gpio):
+      self._gpio = gpio
+
     def do_something(self, pin_number):
         # Whatever you want to trigger when an event is detected goes here
+        # You have access to the GPIO object as self._gpio
         print('pin {0}'.format(pin_number))
 
 
-pins = PinManager(config_file='path/to/config/file.yml', event_handlers=EventHandlers())
+pins = PinManager(config_file='path/to/config/file.yml', event_handlers=EventHandlers)
 
 # With configuration dictionary, assuming my_config_dictionary was defined
-# pins = PinManager(config_dict=my_config_dictionary, event_handlers=EventHandlers())
+# pins = PinManager(config_dict=my_config_dictionary, event_handlers=EventHandlers)
 ```
 
 ### Exceptions

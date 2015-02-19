@@ -24,6 +24,8 @@ class PinManager(object):
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
         self._gpio = GPIO
+        if self.event_handlers:
+            self.event_handlers = self.event_handlers(self._gpio)
 
     def _load_pin_config(self):
         if not self.config_file and not self.config_dict:
