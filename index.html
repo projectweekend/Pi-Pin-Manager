@@ -34,15 +34,20 @@
         <p>Boilerplate code is annoying and sometimes there can be a lot of it working with <a href="https://pypi.python.org/pypi/RPi.GPIO">Raspberry Pi GPIO</a>. I got tired of setting the board mode and declaring GPIO channels in every script so I made a library that uses a config file instead. In addition to getting rid of the boilerplate, <strong>Pi-Pin-Manager</strong> has the added benefit of pulling the configuration out of the code. This means you can modify any pin's behavior without ever touching a Python file or having to redeploy your program.</p>
 
 <h3>
-<a id="install-it" class="anchor" href="#install-it" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install It</h3>
+<a id="install-it" class="anchor" href="#install-it" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install it</h3>
 
 <pre><code>pip install Pi-Pin-Manager
 </code></pre>
 
 <h3>
-<a id="configure-it" class="anchor" href="#configure-it" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configure It</h3>
+<a id="configure-it" class="anchor" href="#configure-it" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configure it</h3>
 
-<p>A config file, written in <a href="http://en.wikipedia.org/wiki/YAML">YAML</a>, is used to define the initial pin setup. If a pin is not defined here it will not be available to the <code>PinManager</code>. The following snippet shows an example configuration file:</p>
+<p>When creating an instance of <code>pi_pin_manager.PinManager</code>, there are two ways you can supply pin configuration information: A config file, written in <a href="http://en.wikipedia.org/wiki/YAML">YAML</a> or a dictionary. If a pin is not defined at this step it will not be available to the <code>PinManager</code>.</p>
+
+<h4>
+<a id="with-file" class="anchor" href="#with-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>With file</h4>
+
+<p>The following snippet shows an example configuration file:</p>
 
 <div class="highlight highlight-yaml"><pre><span class="pl-s1"><span class="pl-ent">18:</span></span>
   <span class="pl-s1"><span class="pl-ent">mode:</span> <span class="pl-s1">OUT</span></span>
@@ -55,6 +60,28 @@
   <span class="pl-s1"><span class="pl-ent">event:</span> <span class="pl-s1">RISING</span></span>
   <span class="pl-s1"><span class="pl-ent">handler:</span> <span class="pl-s1">do_something</span></span>
   <span class="pl-c1"><span class="pl-ent">bounce:</span> 200</span></pre></div>
+
+<h4>
+<a id="with-dictionary" class="anchor" href="#with-dictionary" aria-hidden="true"><span class="octicon octicon-link"></span></a>With dictionary</h4>
+
+<p>This snippet shows the same configuration example above as a dictionary:</p>
+
+<div class="highlight highlight-python"><pre>config <span class="pl-k">=</span> {
+  <span class="pl-c1">18</span>:
+    <span class="pl-s1"><span class="pl-pds">'</span>mode<span class="pl-pds">'</span></span>: <span class="pl-s1"><span class="pl-pds">'</span>OUT<span class="pl-pds">'</span></span>
+    initial: <span class="pl-s1"><span class="pl-pds">'</span>HIGH<span class="pl-pds">'</span></span>
+  <span class="pl-c1">23</span>:
+    <span class="pl-s1"><span class="pl-pds">'</span>mode<span class="pl-pds">'</span></span>: <span class="pl-s1"><span class="pl-pds">'</span>OUT<span class="pl-pds">'</span></span>
+    initial: <span class="pl-s1"><span class="pl-pds">'</span>LOW<span class="pl-pds">'</span></span>
+  <span class="pl-c1">24</span>:
+    <span class="pl-s1"><span class="pl-pds">'</span>mode<span class="pl-pds">'</span></span>: <span class="pl-s1"><span class="pl-pds">'</span>IN<span class="pl-pds">'</span></span>
+    <span class="pl-s1"><span class="pl-pds">'</span>event<span class="pl-pds">'</span></span>: <span class="pl-s1"><span class="pl-pds">'</span>RISING<span class="pl-pds">'</span></span>
+    <span class="pl-s1"><span class="pl-pds">'</span>handler<span class="pl-pds">'</span></span>: <span class="pl-s1"><span class="pl-pds">'</span>do_something<span class="pl-pds">'</span></span>
+    <span class="pl-s1"><span class="pl-pds">'</span>bounce<span class="pl-pds">'</span></span>: <span class="pl-c1">200</span>
+}</pre></div>
+
+<h4>
+<a id="notes" class="anchor" href="#notes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Notes</h4>
 
 <ul>
 <li>Add a numbered element for each pin to enable</li>
@@ -72,17 +99,19 @@
 <code>bounce</code> - This can be used when an <code>event</code> is defined to prevent multiple <code>handler</code> calls being fired accidentally. The value is the number of milliseconds to wait before detecting another <code>event</code>.</li>
 </ul>
 
-<p><strong>Note:</strong></p>
-
 <p>For full documentation about available GPIO input pin configurations see the <a href="http://sourceforge.net/p/raspberry-gpio-python/wiki/Examples/">documentation</a>.</p>
 
 <h3>
-<a id="use-it-no-event" class="anchor" href="#use-it-no-event" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use It (No Event)</h3>
+<a id="use-it-no-event" class="anchor" href="#use-it-no-event" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use it (no event)</h3>
 
 <div class="highlight highlight-python"><pre><span class="pl-k">from</span> pi_pin_manager <span class="pl-k">import</span> PinManager
 
 
+<span class="pl-c"># With configuration file</span>
 pins <span class="pl-k">=</span> PinManager(<span class="pl-vpf">config_file</span><span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>path/to/config/file.yml<span class="pl-pds">'</span></span>)
+
+<span class="pl-c"># With configuration dictionary, assuming my_config_dictionary was defined</span>
+<span class="pl-c"># pins = PinManager(config_dict=my_config_dictionary)</span>
 
 
 <span class="pl-c"># Read a pin</span>
@@ -110,7 +139,7 @@ pins.cleanup(<span class="pl-c1">18</span>)
 pins.cleanup()</pre></div>
 
 <h3>
-<a id="use-it-with-event" class="anchor" href="#use-it-with-event" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use It (With Event)</h3>
+<a id="use-it-with-event" class="anchor" href="#use-it-with-event" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use it (with event)</h3>
 
 <p>If an <code>event</code> and <code>handler</code> have been defined for a pin in the config file, then you must also provide a class that contains the callbacks to execute. Each method you add to this class should match the name of a <code>handler</code> value. Based on the example code below, <code>handler: do_something</code> is expected in the config file <code>path/to/config/file.yml</code>.</p>
 
@@ -119,12 +148,19 @@ pins.cleanup()</pre></div>
 
 <span class="pl-st">class</span> <span class="pl-en">EventHandlers</span>(<span class="pl-e"><span class="pl-s3">object</span></span>):
 
+    <span class="pl-st">def</span> <span class="pl-en"><span class="pl-s3">__init__</span></span>(<span class="pl-vpf">self</span>, <span class="pl-vpf">gpio</span>):
+      <span class="pl-v">self</span>._gpio <span class="pl-k">=</span> gpio
+
     <span class="pl-st">def</span> <span class="pl-en">do_something</span>(<span class="pl-vpf">self</span>, <span class="pl-vpf">pin_number</span>):
         <span class="pl-c"># Whatever you want to trigger when an event is detected goes here</span>
+        <span class="pl-c"># You have access to the GPIO object as self._gpio</span>
         <span class="pl-k">print</span>(<span class="pl-s1"><span class="pl-pds">'</span>pin <span class="pl-c1">{0}</span><span class="pl-pds">'</span></span>.format(pin_number))
 
 
-pins <span class="pl-k">=</span> PinManager(<span class="pl-vpf">config_file</span><span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>path/to/config/file.yml<span class="pl-pds">'</span></span>, <span class="pl-vpf">event_handlers</span><span class="pl-k">=</span>EventHandlers())</pre></div>
+pins <span class="pl-k">=</span> PinManager(<span class="pl-vpf">config_file</span><span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>path/to/config/file.yml<span class="pl-pds">'</span></span>, <span class="pl-vpf">event_handlers</span><span class="pl-k">=</span>EventHandlers)
+
+<span class="pl-c"># With configuration dictionary, assuming my_config_dictionary was defined</span>
+<span class="pl-c"># pins = PinManager(config_dict=my_config_dictionary, event_handlers=EventHandlers)</span></pre></div>
 
 <h3>
 <a id="exceptions" class="anchor" href="#exceptions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Exceptions</h3>
