@@ -1,35 +1,22 @@
 import yaml
 import RPi.GPIO as GPIO
 
-from exceptions import PinConfigurationError, PinNotDefinedError
+from exceptions import PinNotDefinedError
 
 
-class Configurable(object):
+class GPIOConfig(object):
 
-    def __init__(self, config_file=None, config_dict=None, event_handlers=None):
-        self.config_file = config_file
-        self.config_dict = config_dict
+    def __init__(self, config, event_handlers=None):
+        self.config = config
         self.event_handlers = event_handlers
         self._load_pin_config()
 
     def _load_pin_config(self):
-        if not self.config_file and not self.config_dict:
-            message = "PinManager requires either a 'config_file' or 'config_dict' parameter"
-            raise PinConfigurationError(message)
-        if self.config_file:
-            self._configure_from_file()
+        if isinstance(self.config, dict):
+            self.pin_config = self.config_dict
         else:
-            self._configure_from_dict()
-
-    def _configure_from_file(self):
-        with open(self.config_file) as file_data:
-            self.pin_config = yaml.safe_load(file_data)
-
-    def _configure_from_dict(self):
-        if type(self.config_dict) != 'dict':
-            message = "'config_dict' parameter must be a dictionary"
-            raise PinConfigurationError(message)
-        self.pin_config = self.config_dict
+            with open(self.config) as file:
+                self.pin_config = yaml.safe_load(file)
 
     def get_config(self, pin_number=None):
         if pin_number:
@@ -41,7 +28,7 @@ class Configurable(object):
         return self.pin_config.copy()
 
 
-class GPIOSetup(object):
+class GPIOActions(object):
 
     def _initialize_gpio(self):
         GPIO.setmode(GPIO.BCM)
