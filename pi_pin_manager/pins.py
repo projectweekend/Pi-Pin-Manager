@@ -1,13 +1,34 @@
 import yaml
 import RPi.GPIO as GPIO
 
+from base import GPIOConfig, GPIOActions
+from exceptions import PinConfigurationError, PinNotDefinedError
 
-class PinNotDefinedError(Exception):
-    pass
 
+class SinglePinWatcher(GPIOConfig, GPIOActions):
+    """This class is used with a single pin only. Calling the 'start' method will
+    block, waiting for the defined change in pin state. When that happens the
+    function passed into the 'action' parameter is called. When you define this
+    function, it can accept a single argument 'gpio'. An instance of GPIO will
+    be passed in so you can check the state of a pin when firing actions on BOTH
+    rising/falling edges."""
 
-class PinConfigurationError(Exception):
-    pass
+    def __init__(self, config_file=None, config_dict=None, action=None):
+        super(SinglePinWatcher, self).__init__(
+            config_file=config_file,
+            config_dict=config_dict)
+        self.action = action
+        self._initialize_gpio()
+
+    def _initialize_pins(self):
+        if self.pin_config.keys() > 1:
+            message = 'Only one pin can be defined for a SinglePinWatcher'
+            raise PinConfigurationError(message)
+        for pin_num, pin_options in self.pin_config.items():
+            self._setup_pin(pin_num, pin_options)
+
+    def start(self):
+        pass
 
 
 class PinManager(object):
