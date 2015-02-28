@@ -69,7 +69,7 @@ class MultiplePinWatcher(GPIOConfig, GPIOActions):
 
     def _validate_pin_config(self):
         required_keys = ['mode', 'event', 'handler']
-        for _, v in self._pin_config:
+        for _, v in self._pin_config.iteritems():
             if not set(required_keys) < set(v.keys()):
                 message = 'Pin config requires properties: {0}'.format(', '.join(required_keys))
                 raise PinConfigurationError(message)
