@@ -22,23 +22,23 @@ class SinglePinWatcher(GPIOConfig, GPIOActions):
         self._initialize_pins()
 
     def _validate_pin_config(self):
-        if len(self.pin_config.keys()) != 1:
+        if len(self._pin_config.keys()) != 1:
             message = 'Only one pin can be defined for a SinglePinWatcher'
             raise PinConfigurationError(message)
-        pin = self.pin_config.keys()[0]
+        pin = self._pin_config.keys()[0]
         required_keys = ['mode', 'event']
-        if not set(required_keys) < set(self.pin_config[pin].keys()):
+        if not set(required_keys) < set(self._pin_config[pin].keys()):
             message = 'Pin config requires properties: {0}'.format(', '.join(required_keys))
             raise PinConfigurationError(message)
 
     def _initialize_pins(self):
-        for pin_num, pin_options in self.pin_config.items():
+        for pin_num, pin_options in self._pin_config.items():
             self._setup_pin(pin_num, pin_options)
 
     def start(self):
-        pin = self.pin_config.keys()[0]
-        event = self._gpio.__getattribute__(self.pin_config[pin]['event'])
-        bounce = self.pin_config[pin].get('bounce', 0)
+        pin = self._pin_config.keys()[0]
+        event = self._gpio.__getattribute__(self._pin_config[pin]['event'])
+        bounce = self._pin_config[pin].get('bounce', 0)
         try:
             while True:
                 self._gpio.wait_for_edge(pin, event)

@@ -13,19 +13,19 @@ class GPIOConfig(object):
 
     def _load_pin_config(self):
         if isinstance(self._config, dict):
-            self.pin_config = self._config
+            self._pin_config = self._config
         else:
             with open(self._config) as file:
-                self.pin_config = yaml.safe_load(file)
+                self._pin_config = yaml.safe_load(file)
 
     def get_config(self, pin_number=None):
         if pin_number:
             try:
-                return self.pin_config[pin_number].copy()
+                return self._pin_config[pin_number].copy()
             except KeyError:
                 message = "Pin {0} not defined in configuration".format(pin_number)
                 raise PinNotDefinedError(message)
-        return self.pin_config.copy()
+        return self._pin_config.copy()
 
 
 class GPIOActions(object):
