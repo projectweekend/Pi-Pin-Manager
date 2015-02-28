@@ -1,1 +1,6 @@
-from pins import PinManager, SinglePinWatcher, PinConfigurationError, PinNotDefinedError
+from pins import (
+    PinManager,
+    SinglePinWatcher,
+    MultiplePinWatcher,
+    PinConfigurationError,
+    PinNotDefinedError)
