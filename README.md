@@ -93,6 +93,55 @@ watcher.start()
 ```
 
 
+### Multiple Pin Watcher
+
+The `MultiplePinWatcher` can simultaneously watch multiple pins, and fire off custom actions when events are detected. It takes two parameters:
+* A config file or dictionary as outlined above.
+* An event handler class. The class contstructor must take one parameter. An instance of the GPIO module will be passed into the constructor when it is called. This class must also have method names that match the `handler` names used in the config file. The methods you define for this must accept a single parameter. The number of the pin will be passed in automatically into the method when it is called.
+
+**Example Config File:**
+```yaml
+18:
+  mode: IN
+  initial: HIGH
+  resistor: PUD_UP
+  event: FALLING
+  bounce: 200
+  handler: do_something
+
+23:
+  mode: IN
+  initial: HIGH
+  resistor: PUD_UP
+  event: BOTH
+  bounce: 200
+  handler: do_something_else
+```
+
+
+```python
+from pi_pin_manager import MultiplePinWatcher
+
+
+class MyHandler(object):
+
+  def __init__(self, gpio):
+    self._gpio = gpio
+
+  def do_something(self, pin):
+    # Whatever you want to happen when an event is detected goes here
+    print("PIN {0}!!!".format(pin))
+
+  def do_something_else(self, pin):
+    # Whatever you want to happen when an event is detected goes here
+    print("PIN {0}!!!".format(pin))
+
+watcher = MultiplePinWatcher(config='path/to/config/file.yml', event_handler=MyHandler)
+
+watcher.start()
+```
+
+
 ### Pin Manager (no event)
 
 ```python
