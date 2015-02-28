@@ -22,7 +22,7 @@ class SinglePinWatcher(GPIOConfig, GPIOActions):
         self._initialize_pins()
 
     def _validate_pin_config(self):
-        if self.pin_config.keys() != 1:
+        if len(self.pin_config.keys()) != 1:
             message = 'Only one pin can be defined for a SinglePinWatcher'
             raise PinConfigurationError(message)
         pin = self.pin_config.keys()[0]
