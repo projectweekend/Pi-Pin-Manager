@@ -39,10 +39,15 @@ class SinglePinWatcher(GPIOConfig, GPIOActions):
         pin = self.pin_config.keys()[0]
         event = self._gpio.__getattribute__(self.pin_config[pin]['event'])
         bounce = self.pin_config.get('bounce', 0)
-        while True:
-            self._gpio.wait_for_edge(pin, event)
-            self._action(self._gpio)
-            sleep(bounce/1000.0)
+        try:
+            while True:
+                self._gpio.wait_for_edge(pin, event)
+                self._action(self._gpio)
+                sleep(bounce/1000.0)
+        except KeyboardInterrupt:
+            pass
+        finally:
+            self.cleanup()
 
 
 class PinManager(object):
