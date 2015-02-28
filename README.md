@@ -37,10 +37,10 @@ This snippet shows the same configuration example above as a dictionary:
 config = {
   18:
     'mode': 'OUT'
-    initial: 'HIGH'
+    'initial': 'HIGH'
   23:
     'mode': 'OUT'
-    initial: 'LOW'
+    'initial': 'LOW'
   24:
     'mode': 'IN'
     'event': 'RISING'
@@ -62,7 +62,38 @@ config = {
 For full documentation about available GPIO input pin configurations see the [documentation](http://sourceforge.net/p/raspberry-gpio-python/wiki/Examples/).
 
 
-### Use it (no event)
+### Single Pin Watcher
+
+Sometimes, you just need something to watch for an event on one pin and fire off a custom function when that event is detected. This is a perfect use case for the `SinglePinWatcher`. It takes two parameters:
+* A config file or dictionary as outlined above. However this config can only have one pin defined. If more than one pin definition is found a `PinConfigurationError` will be raised.
+* An action function. This function will be called each time the pin `event` (from config) is detected. The function you define for this must accept a single parameter. An instance of the GPIO module will be passed into the function when it is called. This allows you to check the value of the pin in situations where you are detecting both (`event: BOTH`) a rising and falling event.
+
+**Example Config File:**
+```yaml
+23:
+  mode: IN
+  initial: HIGH
+  resistor: PUD_UP
+  event: BOTH
+  bounce: 200
+```
+
+
+```python
+from pi_pin_manager import SinglePinWatcher
+
+def my_action(gpio):
+  # Whatever you want to happen when an event is detected goes here
+  print("Event detected!")
+  print(gpio.input(23))
+
+watcher = SinglePinWatcher(config='path/to/config/file.yml', action=my_action)
+
+watcher.start()
+```
+
+
+### Pin Manager (no event)
 
 ```python
 from pi_pin_manager import PinManager
@@ -100,7 +131,7 @@ pins.cleanup(18)
 pins.cleanup()
 ```
 
-### Use it (with event)
+### Pin Manager (with event)
 
 If an `event` and `handler` have been defined for a pin in the config file, then you must also provide a class that contains the callbacks to execute. Each method you add to this class should match the name of a `handler` value. Based on the example code below, `handler: do_something` is expected in the config file `path/to/config/file.yml`.
 
