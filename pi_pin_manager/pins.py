@@ -13,22 +13,33 @@ class SinglePinWatcher(GPIOConfig, GPIOActions):
     be passed in so you can check the state of a pin when firing actions on BOTH
     rising/falling edges."""
 
-    def __init__(self, config_file=None, config_dict=None, action=None):
-        super(SinglePinWatcher, self).__init__(
-            config_file=config_file,
-            config_dict=config_dict)
-        self.action = action
+    def __init__(self, config, action=None):
+        super(SinglePinWatcher, self).__init__(config=config)
+        self._action = action
+        self._validate_pin_config()
         self._initialize_gpio()
+        self._initialize_pins()
 
-    def _initialize_pins(self):
-        if self.pin_config.keys() > 1:
+    def _validate_pin_config(self):
+        if self.pin_config.keys() != 1:
             message = 'Only one pin can be defined for a SinglePinWatcher'
             raise PinConfigurationError(message)
+        pin = self.pin_config.keys()[0]
+        required_keys = ['mode', 'event']
+        if not set(required_keys) < set(self.pin_config[pin].keys()):
+            message = 'Pin config requires properties: {0}'.format(', '.join(required_keys))
+            raise PinConfigurationError(message)
+
+    def _initialize_pins(self):
         for pin_num, pin_options in self.pin_config.items():
             self._setup_pin(pin_num, pin_options)
 
     def start(self):
-        pass
+        pin = self.pin_config.keys()[0]
+        event = self._gpio.__getattribute__(self.pin_config[pin]['event'])
+        while True:
+            self._gpio.wait_for_edge(pin, event)
+            self._action(self._gpio)
 
 
 class PinManager(object):
