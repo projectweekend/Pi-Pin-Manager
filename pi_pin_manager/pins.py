@@ -38,7 +38,7 @@ class SinglePinWatcher(GPIOConfig, GPIOActions):
     def start(self):
         pin = self.pin_config.keys()[0]
         event = self._gpio.__getattribute__(self.pin_config[pin]['event'])
-        bounce = self.pin_config.get('bounce', 0)
+        bounce = self.pin_config[pin].get('bounce', 0)
         try:
             while True:
                 self._gpio.wait_for_edge(pin, event)
