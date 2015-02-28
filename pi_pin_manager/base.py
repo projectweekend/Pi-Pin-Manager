@@ -6,9 +6,9 @@ from exceptions import PinNotDefinedError
 
 class GPIOConfig(object):
 
-    def __init__(self, config, event_handlers=None):
+    def __init__(self, config, event_handler=None):
         self._config = config
-        self._event_handlers = event_handlers
+        self._event_handler = event_handler
         self._load_pin_config()
 
     def _load_pin_config(self):
@@ -34,8 +34,8 @@ class GPIOActions(object):
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
         self._gpio = GPIO
-        if self._event_handlers:
-            self._event_handlers = self._event_handlers(self._gpio)
+        if self._event_handler:
+            self._event_handler = self._event_handler(self._gpio)
 
     def _setup_pin(self, number, options):
         mode = self._gpio.__getattribute__(options['mode'])
@@ -52,7 +52,7 @@ class GPIOActions(object):
         bounce = options.get('bounce', 0)
         if event and handler:
             event = self._gpio.__getattribute__(event)
-            handler = self._event_handlers.__getattribute__(handler)
+            handler = self._event_handler.__getattribute__(handler)
             self._gpio.add_event_detect(number, event, callback=handler, bouncetime=bounce)
 
     def cleanup(self, pin_number=None):
