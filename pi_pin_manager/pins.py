@@ -89,6 +89,22 @@ class MultiplePinWatcher(GPIOConfig, GPIOActions):
             self.cleanup()
 
 
+class GPIOHelper(GPIOConfig, GPIOActions):
+    """This is a helper class that will configure GPIO from a file or dictionary.
+    After that you have direct access to the RPi.GPIO module using the 'gpio'
+    property. The rest is up to you."""
+
+    def __init__(self, config):
+        super(GPIOHelper, self).__init__(config=config)
+        self._initialize_gpio()
+        self._initialize_pins()
+        self.gpio = self._gpio
+
+    def _initialize_pins(self):
+        for pin_num, pin_options in self._pin_config.items():
+            self._setup_pin(pin_num, pin_options)
+
+
 class PinManager(object):
 
     def __init__(self, config_file=None, config_dict=None, event_handlers=None):

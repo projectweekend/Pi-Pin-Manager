@@ -9,3 +9,4 @@ v0.0.10, 2015-01-05 -- Add get_config for all pins.
 v0.0.11, 2015-01-05 -- Update project page URL.
 v0.0.12, 2015-01-07 -- Update RPi.GPIO to 0.5.9.
 v1.0.0, 2015-02-19 -- Events handler gets passed instance of GPIO for use in callbacks.
+v1.1.0, 2015-03-02 -- Add a variety of helpful classes.
