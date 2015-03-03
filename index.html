@@ -69,10 +69,10 @@
 <div class="highlight highlight-python"><pre>config <span class="pl-k">=</span> {
   <span class="pl-c1">18</span>:
     <span class="pl-s1"><span class="pl-pds">'</span>mode<span class="pl-pds">'</span></span>: <span class="pl-s1"><span class="pl-pds">'</span>OUT<span class="pl-pds">'</span></span>
-    initial: <span class="pl-s1"><span class="pl-pds">'</span>HIGH<span class="pl-pds">'</span></span>
+    <span class="pl-s1"><span class="pl-pds">'</span>initial<span class="pl-pds">'</span></span>: <span class="pl-s1"><span class="pl-pds">'</span>HIGH<span class="pl-pds">'</span></span>
   <span class="pl-c1">23</span>:
     <span class="pl-s1"><span class="pl-pds">'</span>mode<span class="pl-pds">'</span></span>: <span class="pl-s1"><span class="pl-pds">'</span>OUT<span class="pl-pds">'</span></span>
-    initial: <span class="pl-s1"><span class="pl-pds">'</span>LOW<span class="pl-pds">'</span></span>
+    <span class="pl-s1"><span class="pl-pds">'</span>initial<span class="pl-pds">'</span></span>: <span class="pl-s1"><span class="pl-pds">'</span>LOW<span class="pl-pds">'</span></span>
   <span class="pl-c1">24</span>:
     <span class="pl-s1"><span class="pl-pds">'</span>mode<span class="pl-pds">'</span></span>: <span class="pl-s1"><span class="pl-pds">'</span>IN<span class="pl-pds">'</span></span>
     <span class="pl-s1"><span class="pl-pds">'</span>event<span class="pl-pds">'</span></span>: <span class="pl-s1"><span class="pl-pds">'</span>RISING<span class="pl-pds">'</span></span>
@@ -102,7 +102,85 @@
 <p>For full documentation about available GPIO input pin configurations see the <a href="http://sourceforge.net/p/raspberry-gpio-python/wiki/Examples/">documentation</a>.</p>
 
 <h3>
-<a id="use-it-no-event" class="anchor" href="#use-it-no-event" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use it (no event)</h3>
+<a id="single-pin-watcher" class="anchor" href="#single-pin-watcher" aria-hidden="true"><span class="octicon octicon-link"></span></a>Single Pin Watcher</h3>
+
+<p>Sometimes, you just need something to watch for an event on one pin and fire off a custom function when that event is detected. This is a perfect use case for the <code>SinglePinWatcher</code>. It takes two parameters:</p>
+
+<ul>
+<li>A config file or dictionary as outlined above. However this config can only have one pin defined. If more than one pin definition is found a <code>PinConfigurationError</code> will be raised.</li>
+<li>An action function. This function will be called each time the pin <code>event</code> (from config) is detected. The function you define for this must accept a single parameter. An instance of the GPIO module will be passed into the function when it is called. This allows you to check the value of the pin in situations where you are detecting both (<code>event: BOTH</code>) a rising and falling event.</li>
+</ul>
+
+<p><strong>Example Config File:</strong></p>
+
+<div class="highlight highlight-yaml"><pre><span class="pl-s1"><span class="pl-ent">23:</span></span>
+  <span class="pl-s1"><span class="pl-ent">mode:</span> <span class="pl-s1">IN</span></span>
+  <span class="pl-s1"><span class="pl-ent">initial:</span> <span class="pl-s1">HIGH</span></span>
+  <span class="pl-s1"><span class="pl-ent">resistor:</span> <span class="pl-s1">PUD_UP</span></span>
+  <span class="pl-s1"><span class="pl-ent">event:</span> <span class="pl-s1">BOTH</span></span>
+  <span class="pl-c1"><span class="pl-ent">bounce:</span> 200</span></pre></div>
+
+<div class="highlight highlight-python"><pre><span class="pl-k">from</span> pi_pin_manager <span class="pl-k">import</span> SinglePinWatcher
+
+<span class="pl-st">def</span> <span class="pl-en">my_action</span>(<span class="pl-vpf">gpio</span>):
+  <span class="pl-c"># Whatever you want to happen when an event is detected goes here</span>
+  <span class="pl-k">print</span>(<span class="pl-s1"><span class="pl-pds">"</span>Event detected!<span class="pl-pds">"</span></span>)
+  <span class="pl-k">print</span>(gpio.input(<span class="pl-c1">23</span>))
+
+watcher <span class="pl-k">=</span> SinglePinWatcher(<span class="pl-vpf">config</span><span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>path/to/config/file.yml<span class="pl-pds">'</span></span>, <span class="pl-vpf">action</span><span class="pl-k">=</span>my_action)
+
+watcher.start()</pre></div>
+
+<h3>
+<a id="multiple-pin-watcher" class="anchor" href="#multiple-pin-watcher" aria-hidden="true"><span class="octicon octicon-link"></span></a>Multiple Pin Watcher</h3>
+
+<p>The <code>MultiplePinWatcher</code> can simultaneously watch multiple pins, and fire off custom actions when events are detected. It takes two parameters:</p>
+
+<ul>
+<li>A config file or dictionary as outlined above.</li>
+<li>An event handler class. The class contstructor must take one parameter. An instance of the GPIO module will be passed into the constructor when it is called. This class must also have method names that match the <code>handler</code> names used in the config file. The methods you define for this must accept a single parameter. The number of the pin will be passed in automatically into the method when it is called.</li>
+</ul>
+
+<p><strong>Example Config File:</strong></p>
+
+<div class="highlight highlight-yaml"><pre><span class="pl-s1"><span class="pl-ent">18:</span></span>
+  <span class="pl-s1"><span class="pl-ent">mode:</span> <span class="pl-s1">IN</span></span>
+  <span class="pl-s1"><span class="pl-ent">initial:</span> <span class="pl-s1">HIGH</span></span>
+  <span class="pl-s1"><span class="pl-ent">resistor:</span> <span class="pl-s1">PUD_UP</span></span>
+  <span class="pl-s1"><span class="pl-ent">event:</span> <span class="pl-s1">FALLING</span></span>
+  <span class="pl-c1"><span class="pl-ent">bounce:</span> 200</span>
+  <span class="pl-s1"><span class="pl-ent">handler:</span> <span class="pl-s1">do_something</span></span>
+
+<span class="pl-s1"><span class="pl-ent">23:</span></span>
+  <span class="pl-s1"><span class="pl-ent">mode:</span> <span class="pl-s1">IN</span></span>
+  <span class="pl-s1"><span class="pl-ent">initial:</span> <span class="pl-s1">HIGH</span></span>
+  <span class="pl-s1"><span class="pl-ent">resistor:</span> <span class="pl-s1">PUD_UP</span></span>
+  <span class="pl-s1"><span class="pl-ent">event:</span> <span class="pl-s1">BOTH</span></span>
+  <span class="pl-c1"><span class="pl-ent">bounce:</span> 200</span>
+  <span class="pl-s1"><span class="pl-ent">handler:</span> <span class="pl-s1">do_something_else</span></span></pre></div>
+
+<div class="highlight highlight-python"><pre><span class="pl-k">from</span> pi_pin_manager <span class="pl-k">import</span> MultiplePinWatcher
+
+
+<span class="pl-st">class</span> <span class="pl-en">MyHandler</span>(<span class="pl-e"><span class="pl-s3">object</span></span>):
+
+  <span class="pl-st">def</span> <span class="pl-en"><span class="pl-s3">__init__</span></span>(<span class="pl-vpf">self</span>, <span class="pl-vpf">gpio</span>):
+    <span class="pl-v">self</span>._gpio <span class="pl-k">=</span> gpio
+
+  <span class="pl-st">def</span> <span class="pl-en">do_something</span>(<span class="pl-vpf">self</span>, <span class="pl-vpf">pin</span>):
+    <span class="pl-c"># Whatever you want to happen when an event is detected goes here</span>
+    <span class="pl-k">print</span>(<span class="pl-s1"><span class="pl-pds">"</span>PIN <span class="pl-c1">{0}</span>!!!<span class="pl-pds">"</span></span>.format(pin))
+
+  <span class="pl-st">def</span> <span class="pl-en">do_something_else</span>(<span class="pl-vpf">self</span>, <span class="pl-vpf">pin</span>):
+    <span class="pl-c"># Whatever you want to happen when an event is detected goes here</span>
+    <span class="pl-k">print</span>(<span class="pl-s1"><span class="pl-pds">"</span>PIN <span class="pl-c1">{0}</span>!!!<span class="pl-pds">"</span></span>.format(pin))
+
+watcher <span class="pl-k">=</span> MultiplePinWatcher(<span class="pl-vpf">config</span><span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>path/to/config/file.yml<span class="pl-pds">'</span></span>, <span class="pl-vpf">event_handler</span><span class="pl-k">=</span>MyHandler)
+
+watcher.start()</pre></div>
+
+<h3>
+<a id="pin-manager-no-event" class="anchor" href="#pin-manager-no-event" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pin Manager (no event)</h3>
 
 <div class="highlight highlight-python"><pre><span class="pl-k">from</span> pi_pin_manager <span class="pl-k">import</span> PinManager
 
@@ -139,7 +217,7 @@ pins.cleanup(<span class="pl-c1">18</span>)
 pins.cleanup()</pre></div>
 
 <h3>
-<a id="use-it-with-event" class="anchor" href="#use-it-with-event" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use it (with event)</h3>
+<a id="pin-manager-with-event" class="anchor" href="#pin-manager-with-event" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pin Manager (with event)</h3>
 
 <p>If an <code>event</code> and <code>handler</code> have been defined for a pin in the config file, then you must also provide a class that contains the callbacks to execute. Each method you add to this class should match the name of a <code>handler</code> value. Based on the example code below, <code>handler: do_something</code> is expected in the config file <code>path/to/config/file.yml</code>.</p>
 
