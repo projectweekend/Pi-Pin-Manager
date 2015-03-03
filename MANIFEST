@@ -3,4 +3,6 @@ CHANGES.txt
 README.txt
 setup.py
 pi_pin_manager/__init__.py
+pi_pin_manager/base.py
+pi_pin_manager/exceptions.py
 pi_pin_manager/pins.py
