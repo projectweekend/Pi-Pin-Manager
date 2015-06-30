@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='Pi-Pin-Manager',
-    version='1.1.0',
+    version='1.1.1',
     author='Brian Hines',
     author_email='brian@projectweekend.net',
     packages=['pi_pin_manager'],
@@ -12,6 +12,6 @@ setup(
     long_description=open('README.txt').read(),
     install_requires=[
         "PyYAML == 3.11",
-        "RPi.GPIO == 0.5.9",
+        "RPi.GPIO == 0.5.11",
     ],
 )
