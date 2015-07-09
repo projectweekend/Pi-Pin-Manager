@@ -3,7 +3,7 @@ from time import sleep
 import RPi.GPIO as GPIO
 
 from base import GPIOConfig, GPIOActions
-from exceptions import PinConfigurationError, PinNotDefinedError
+from errors import PinConfigurationError, PinNotDefinedError
 
 
 class SinglePinWatcher(GPIOConfig, GPIOActions):
