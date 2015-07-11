@@ -19,7 +19,7 @@ class GPIOConfig(object):
         v = ConfigValidator(CONFIG_SCHEMA)
         for item in self._pin_config:
             if not v.validate(item):
-                message = "Invalid configuration file/dictionary. Check 'errors' for detail."
+                message = "Invalid configuration. Check 'errors' for detail."
                 raise InvalidConfigurationError(message, v.errors)
 
     def get_config(self, pin_number=None):
