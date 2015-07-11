@@ -29,9 +29,10 @@ class SinglePinWatcher(GPIOConfig, GPIOActions):
             raise PinConfigurationError(message)
 
     def start(self):
-        pin = self._pin_config[0]['pin']
-        event = self._gpio.__getattribute__(self._pin_config[0]['event'])
-        bounce = self._pin_config[0].get('bounce', 0)
+        config = self._pin_config[0]
+        pin = config['pin']
+        event = getattr(self._gpio, config['event'])
+        bounce = config.get('bounce', 0)
         try:
             while True:
                 self._gpio.wait_for_edge(pin, event)
