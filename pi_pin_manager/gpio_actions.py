@@ -12,11 +12,11 @@ class GPIOActions(object):
 
     def _setup_pin(self, options):
         number = options['pin']
-        mode = self._gpio.__getattribute__(options['mode'])
-        initial = self._gpio.__getattribute__(options.get('initial', 'LOW'))
+        mode = getattr(self._gpio, options['mode'])
+        initial = getattr(self._gpio, options.get('initial', 'LOW'))
         resistor = options.get('resistor', None)
         if resistor:
-            resistor = self._gpio.__getattribute__(resistor)
+            resistor = getattr(self._gpio, resistor)
             self._gpio.setup(number, mode, initial=initial, pull_up_down=resistor)
         else:
             self._gpio.setup(number, mode, initial=initial)
@@ -25,8 +25,8 @@ class GPIOActions(object):
         handler = options.get('handler', None)
         bounce = options.get('bounce', 0)
         if event and handler:
-            event = self._gpio.__getattribute__(event)
-            handler = self._event_handler.__getattribute__(handler)
+            event = getattr(self._gpio, event)
+            handler = getattr(self._event_handler, handler)
             self._gpio.add_event_detect(number, event, callback=handler, bouncetime=bounce)
 
     def cleanup(self, pin_number=None):
