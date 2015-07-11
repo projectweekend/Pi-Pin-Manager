@@ -1,93 +1,9 @@
 import yaml
-from time import sleep
 import RPi.GPIO as GPIO
 
 from gpio_config import GPIOConfig
 from gpio_actions import GPIOActions
 from errors import PinConfigurationError, PinNotDefinedError
-
-
-class SinglePinWatcher(GPIOConfig, GPIOActions):
-    """This class is used with a single pin only. Calling the 'start' method will
-    block, waiting for the defined change in pin state. When that happens the
-    function passed into the 'action' parameter is called. When you define this
-    function, it can accept a single argument 'gpio'. An instance of GPIO will
-    be passed in so you can check the state of a pin when firing actions on BOTH
-    rising/falling edges."""
-
-    def __init__(self, config, action=None):
-        super(SinglePinWatcher, self).__init__(config=config)
-        self._action = action
-        self._validate_pin_config()
-        self._initialize_gpio()
-        self._initialize_pins()
-
-    def _validate_pin_config(self):
-        if len(self._pin_config.keys()) != 1:
-            message = 'Only one pin can be defined for a SinglePinWatcher'
-            raise PinConfigurationError(message)
-        pin = self._pin_config.keys()[0]
-        required_keys = ['mode', 'event']
-        if not set(required_keys) < set(self._pin_config[pin].keys()):
-            message = 'Pin config requires properties: {0}'.format(', '.join(required_keys))
-            raise PinConfigurationError(message)
-
-    def _initialize_pins(self):
-        for pin_num, pin_options in self._pin_config.items():
-            self._setup_pin(pin_num, pin_options)
-
-    def start(self):
-        pin = self._pin_config.keys()[0]
-        event = self._gpio.__getattribute__(self._pin_config[pin]['event'])
-        bounce = self._pin_config[pin].get('bounce', 0)
-        try:
-            while True:
-                self._gpio.wait_for_edge(pin, event)
-                self._action(self._gpio)
-                sleep(bounce/1000.0)
-        except KeyboardInterrupt:
-            pass
-        finally:
-            self.cleanup()
-
-
-class MultiplePinWatcher(GPIOConfig, GPIOActions):
-    """This class is used with multiple pins. Calling the 'start' method will
-    block, waiting for changes in state for the defined pins. When that happens
-    a method on the `event_handler` class, matching the 'handler' name from the
-    pin config is called. Each of these 'handler' methods takes a single argument,
-    the pin number, which is passed in automatically by the RPi.GPIO library.
-
-    The 'event_handler' class should have one parameter in its constructor. An
-    instance of GPIO will be passed in so you have access to it in each custom
-    'handler' method."""
-
-    def __init__(self, config, event_handler):
-        super(MultiplePinWatcher, self).__init__(config=config, event_handler=event_handler)
-        self._validate_pin_config()
-        self._initialize_gpio()
-        self._initialize_pins()
-
-    def _validate_pin_config(self):
-        required_keys = ['mode', 'event', 'handler']
-        for _, v in self._pin_config.iteritems():
-            if not set(required_keys) < set(v.keys()):
-                message = 'Pin config requires properties: {0}'.format(', '.join(required_keys))
-                raise PinConfigurationError(message)
-
-    def _initialize_pins(self):
-        for pin_num, pin_options in self._pin_config.items():
-            self._setup_pin(pin_num, pin_options)
-
-    def start(self):
-        try:
-            # keep this running for the threaded callbacks
-            while True:
-                sleep(0.250)
-        except KeyboardInterrupt:
-            pass
-        finally:
-            self.cleanup()
 
 
 class GPIOHelper(GPIOConfig, GPIOActions):
