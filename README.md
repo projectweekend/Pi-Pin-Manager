@@ -65,3 +65,31 @@ config = [
 * `bounce` - This can be used when an `event` is defined to prevent multiple `handler` calls being fired accidentally. The value is the number of milliseconds to wait before detecting another `event`.
 
 For full documentation about available GPIO input pin configurations see the [documentation](http://sourceforge.net/p/raspberry-gpio-python/wiki/Examples/).
+
+
+### Single Pin Watcher
+
+Sometimes, you just need something to watch for an event on one pin and fire off a function when that event is detected. This is a perfect use case for the `SinglePinWatcher`. It takes two parameters:
+* A config file or list as outlined above. However this config can only have one pin defined. If more than one pin definition is found a `PinConfigurationError` will be raised.
+* An action function. This function will be called each time the pin `event` (from config) is detected. The function you define for this must accept a single parameter. An instance of the GPIO module will be passed into the function when it is called. This allows you to check the value of the pin in situations where you are detecting both (`event: BOTH`) a rising and falling event.
+
+**Example Config File:**
+```yaml
+- pin: 23
+  mode: IN
+  initial: HIGH
+  event: BOTH
+  bounce: 200
+```
+
+```python
+from pi_pin_manager import SinglePinWatcher
+
+def my_action(gpio):
+  # Whatever you want to happen when an event is detected goes here
+  print("Event detected!")
+  print(gpio.input(23))
+
+watcher = SinglePinWatcher(config='path/to/config/file.yml', action=my_action)
+watcher.start()
+```
