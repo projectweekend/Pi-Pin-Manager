@@ -2,7 +2,8 @@ import yaml
 from time import sleep
 import RPi.GPIO as GPIO
 
-from base import GPIOConfig, GPIOActions
+from gpio_config import GPIOConfig
+from gpio_actions import GPIOActions
 from errors import PinConfigurationError, PinNotDefinedError
 
 
