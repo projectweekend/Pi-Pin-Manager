@@ -6,13 +6,13 @@ def action(gpio):
 
 
 def main():
-    config = {
+    config = [{
         'pin': 23,
         'mode': 'IN',
         'resistor': 'PUD_UP',
         'event': 'BOTH',
         'bounce': 300
-    }
+    }]
     watcher = SinglePinWatcher(config=config, action=action)
     watcher.start()
 
