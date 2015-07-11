@@ -6,10 +6,10 @@ class EventHandler(object):
     def __init__(self, gpio):
         self.gpio = gpio
 
-    def do_something(self):
+    def do_something(self, pin):
         print("Button pressed!")
 
-    def do_something_else(self):
+    def do_something_else(self, pin):
         print("Button pressed!")
 
 
