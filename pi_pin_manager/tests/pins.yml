@@ -4,8 +4,3 @@
 - pin: 23
   mode: OUT
   initial: LOW
-- pin: 24
-  mode: IN
-  event: RISING
-  handler: do_something
-  bounce: 200
