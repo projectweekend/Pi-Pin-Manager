@@ -3,6 +3,10 @@ CHANGES.txt
 README.txt
 setup.py
 pi_pin_manager/__init__.py
-pi_pin_manager/base.py
-pi_pin_manager/exceptions.py
-pi_pin_manager/pins.py
+pi_pin_manager/errors.py
+pi_pin_manager/gpio_actions.py
+pi_pin_manager/gpio_config.py
+pi_pin_manager/gpio_helper.py
+pi_pin_manager/multi_pin_watcher.py
+pi_pin_manager/single_pin_watcher.py
+pi_pin_manager/validation.py
