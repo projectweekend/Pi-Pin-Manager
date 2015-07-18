@@ -24,7 +24,10 @@ class GPIOHelper(GPIOConfig, GPIOActions):
 
     def write(self, pin_number, value):
         config = self.get_config(pin_number)
-        if config['mode'] != 'OUT':
+        if not config:
+            message = "Pin {0} is not defined in configuration".format(pin_number)
+            raise PinConfigurationError(message)
+        if config[0]['mode'] != 'OUT':
             message = "Pin {0} not set as 'OUT' in configuration".format(pin_number)
             raise PinConfigurationError(message)
         self.gpio.output(pin_number, value)
