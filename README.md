@@ -9,7 +9,7 @@ pip install Pi-Pin-Manager
 
 ### Configure it
 
-When creating an instance of `pi_pin_manager.PinManager`, there are two ways you can supply pin configuration information: A config file, written in [YAML](http://en.wikipedia.org/wiki/YAML) or a dictionary. If a pin is not defined at this step it will not be available to the `PinManager`.
+When creating an instance of `pi_pin_manager.PinManager`, there are two ways you can supply pin configuration information: A config file, written in [YAML](http://en.wikipedia.org/wiki/YAML) or a list of dictionaries. If a pin is not defined at this step it will not be available to the `PinManager`.
 
 #### With file
 
@@ -99,7 +99,7 @@ watcher.start()
 
 The `MultiplePinWatcher` can simultaneously watch multiple pins, and fire off custom actions when events are detected. It takes two parameters:
 * A config file or list as outlined above.
-* An event handler class. The class contstructor must take one parameter. An instance of the GPIO module will be passed into the constructor when it is called. This class must also have method names that match the `handler` names used in the config file. The methods you define for this must accept a single parameter. The number of the pin will be passed in automatically into the method when it is called.
+* An event handler class. The class constructor must take one parameter. An instance of the GPIO module will be passed into the constructor when it is called. This class must also have method names that match the `handler` names used in the config file. The methods you define for this must accept a single parameter. The number of the pin will be passed in automatically into the method when it is called.
 
 **Example Config File:**
 ```yaml
@@ -137,7 +137,22 @@ class MyHandler(object):
     # Whatever you want to happen when an event is detected goes here
     print("PIN {0}!!!".format(pin))
 
-watcher = MultiplePinWatcher(config='path/to/config/file.yml', event_handler=MyHandler)
 
+watcher = MultiplePinWatcher(config='path/to/config/file.yml', event_handler=MyHandler)
 watcher.start()
+```
+
+
+### GPIO Helper
+
+The `GPIOHelper` class can be used if you just want to configure GPIO from a config file or list. Once initialized you have access to the GPIO module via `self.gpio`. There are also a few convenience methods available: `read`, `write`, `on`, `off`.
+
+```python
+from pi_pin_manager import GPIOHelper
+
+helper = GPIOHelper(config='path/to/config/file.yml')
+reading = helper.read(pin_number=18)
+helper.write(pin_number=18, value=1)
+helper.on(pin_number=18)
+helper.off(pin_number=18)
 ```
