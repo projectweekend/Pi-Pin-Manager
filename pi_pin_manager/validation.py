@@ -8,6 +8,7 @@ CONFIG_SCHEMA = {
     },
     'mode': {
         'type': 'string',
+        'required': True,
         'is_pin_mode': True
     },
     'initial': {

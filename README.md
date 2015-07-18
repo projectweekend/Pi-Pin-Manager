@@ -20,6 +20,7 @@ The following snippet shows an example configuration file:
   mode: OUT
   initial: HIGH
 - pin: 23
+  mode: OUT
   initial: LOW
 - pin: 24
   mode: IN
