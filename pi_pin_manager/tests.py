@@ -1,6 +1,6 @@
 import unittest
 
-from pi_pin_manager.models import Pin
+from pi_pin_manager.pins import Pin
 from pi_pin_manager.mocks import MockGPIO
 
 
