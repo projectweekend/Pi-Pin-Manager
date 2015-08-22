@@ -36,3 +36,9 @@ The following snippet shows an example configuration file:
 * `resistor` - This controls the software defined pull up/pull down resistor available in the Broadcom SOC. Accepted values are: `PUD_UP`, `PUD_DOWN`, `PUD_OFF`. (Optional - defaults to `PUD_OFF`)
 
 For full documentation about available GPIO input pin configurations see the [documentation](http://sourceforge.net/p/raspberry-gpio-python/wiki/Examples/).
+
+#### Run Tests
+
+```
+nosetests -v --with-coverage --cover-erase --cover-package=pi_pin_manager --cover-html
+```
