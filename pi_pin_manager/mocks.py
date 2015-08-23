@@ -4,6 +4,7 @@ from collections import defaultdict
 class MockGPIO(object):
 
     def __init__(self):
+        self.BCM = None
         self.IN = None
         self.OUT = None
         self.LOW = 0
@@ -12,6 +13,12 @@ class MockGPIO(object):
         self.PUD_DOWN = None
         self.PUD_OFF = None
         self._data = defaultdict(int)
+
+    def setmode(self, mode):
+        pass
+
+    def setwarnings(self, warn):
+        pass
 
     def input(self, pin_number):
         return self._data[pin_number]

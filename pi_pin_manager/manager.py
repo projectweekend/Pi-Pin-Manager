@@ -6,8 +6,11 @@ from pi_pin_manager.pins import Pin
 class PinManager(object):
 
     def __init__(self, config_file, gpio):
+        self._gpio = gpio
+        self._gpio.setmode(self._gpio.BCM)
+        self._gpio.setwarnings(False)
         config = self._load_config_from_file(config_file=config_file)
-        for pin in Pin.generate_pins(config=config, gpio=gpio):
+        for pin in Pin.generate_pins(config=config, gpio=self._gpio):
             attribute_name = 'pin_{0}'.format(pin.number)
             setattr(self, attribute_name, pin)
 
