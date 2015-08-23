@@ -42,7 +42,7 @@ For full documentation about available GPIO input pin configurations see the [do
 
 The following snippet demonstrates a `PinManager` instance using the example config file referenced above. The `PinManager` instance will have named attributes for each pin number you defined in the config file.
 
-```
+```python
 import RPi.GPIO as GPIO
 from pi_pin_manager import PinManager
 
