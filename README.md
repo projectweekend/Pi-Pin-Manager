@@ -7,10 +7,6 @@ Boilerplate code is annoying and sometimes there can be a lot of it working with
 pip install Pi-Pin-Manager
 ```
 
-### Configure it
-
-When creating an instance of `pi_pin_manager.PinManager`, there are two ways you can supply pin configuration information: A config file, written in [YAML](http://en.wikipedia.org/wiki/YAML) or a list of dictionaries. If a pin is not defined at this step it will not be available to the `PinManager`.
-
 #### Example Config File
 
 The following snippet shows an example configuration file:
