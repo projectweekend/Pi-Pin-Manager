@@ -1,0 +1,9 @@
+18:
+    mode: OUT
+23:
+    mode: IN
+    initial: HIGH
+    resistor: PUD_UP
+24:
+    mode: OUT
+    resistor: PUD_DOWN

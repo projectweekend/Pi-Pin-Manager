@@ -2,6 +2,7 @@ import unittest
 
 from pi_pin_manager.pins import Pin
 from pi_pin_manager.mocks import MockGPIO
+from pi_pin_manager.manager import PinManager
 
 
 PIN_CONFIG = {
@@ -18,10 +19,10 @@ PIN_CONFIG = {
 }
 
 
-class PinModelTestCase(unittest.TestCase):
+class PinTestCase(unittest.TestCase):
 
     def setUp(self):
-        super(PinModelTestCase, self).setUp()
+        super(PinTestCase, self).setUp()
         self.gpio = MockGPIO()
 
     def test_create_pin_with_valid_data(self):
@@ -97,3 +98,21 @@ class PinModelTestCase(unittest.TestCase):
         pins = Pin.generate_pins(PIN_CONFIG, self.gpio)
         for pin in pins:
             self.assertTrue(isinstance(pin, Pin))
+
+
+class PinManagerTestCase(unittest.TestCase):
+
+    def setUp(self):
+        super(PinManagerTestCase, self).setUp()
+        self.valid_config_file = './pi_pin_manager/test_valid_config.yml'
+        self.invalid_config_file = './pi_pin_manager/test_invalid_config.yml'
+        self.gpio = MockGPIO()
+
+    def test_create_pin_manager_with_valid_config(self):
+        manager = PinManager(config_file=self.valid_config_file, gpio=self.gpio)
+        self.assertTrue(isinstance(manager.pin_18, Pin))
+        self.assertTrue(isinstance(manager.pin_23, Pin))
+        self.assertTrue(isinstance(manager.pin_24, Pin))
+
+    def test_create_pin_manager_with_invalid_config(self):
+        self.assertRaises(ValueError, PinManager, self.invalid_config_file, self.gpio)
