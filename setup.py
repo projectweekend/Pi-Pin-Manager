@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='Pi-Pin-Manager',
-    version='2.0.0',
+    version='3.0.0',
     author='Brian Hines',
     author_email='brian@projectweekend.net',
     packages=['pi_pin_manager'],
@@ -11,7 +11,6 @@ setup(
     description='Setup Raspberry Pi GPIO pins using a configuration file, not boilerplate.',
     long_description=open('README.txt').read(),
     install_requires=[
-        "Cerberus == 0.9.1",
         "PyYAML == 3.11",
         "RPi.GPIO == 0.5.11",
     ],

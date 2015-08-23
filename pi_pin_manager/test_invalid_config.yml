@@ -1,0 +1,3 @@
+18:
+    initial: LOW
+    resistor: PUD_DOWN
