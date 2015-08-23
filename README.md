@@ -55,6 +55,9 @@ manager.pin_18.off()
 
 # Read pin 18
 manager.pin_18.read()
+
+# Settings dictionary for Pin 18
+manager.pin_18.settings
 ```
 
 
