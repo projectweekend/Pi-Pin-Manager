@@ -57,6 +57,19 @@ class PinTestCase(unittest.TestCase):
     def test_create_pin_with_invalid_resistor(self):
         self.assertRaises(ValueError, Pin, 18, 'OUT', 'LOW', 'not', self.gpio)
 
+    def test_changing_pin_attributes_after_creation(self):
+        pin = Pin(
+            number=18,
+            mode='OUT',
+            initial='LOW',
+            resistor='PUD_OFF',
+            gpio=self.gpio)
+
+        self.assertRaises(AttributeError, setattr, pin, 'number', 23)
+        self.assertRaises(AttributeError, setattr, pin, 'mode', 'IN')
+        self.assertRaises(AttributeError, setattr, pin, 'initial', 'HIGH')
+        self.assertRaises(AttributeError, setattr, pin, 'resistor', 'PUD_UP')
+
     def test_read_pin(self):
         pin = Pin(
             number=18,

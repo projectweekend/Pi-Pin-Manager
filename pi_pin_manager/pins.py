@@ -29,6 +29,8 @@ class Pin(object):
 
     @number.setter
     def number(self, number):
+        if hasattr(self, '_pin_number'):
+            raise AttributeError("'number' cannot be modified after Pin object is created")
         self._pin_number = int(number)
 
     @property
@@ -37,6 +39,8 @@ class Pin(object):
 
     @mode.setter
     def mode(self, mode):
+        if hasattr(self, '_pin_mode'):
+            raise AttributeError("'mode' cannot be modified after Pin object is created")
         if mode not in PIN_MODES:
             raise ValueError("'mode' must be one of: {0}".format(', '.join(PIN_MODES)))
         self._pin_mode = mode
@@ -47,6 +51,8 @@ class Pin(object):
 
     @initial.setter
     def initial(self, initial):
+        if hasattr(self, '_pin_initial'):
+            raise AttributeError("'initial' cannot be modified after Pin object is created")
         if initial not in PIN_INITIALS:
             raise ValueError("'initial' must be one of: {0}".format(', '.join(PIN_INITIALS)))
         self._pin_initial = initial
@@ -57,6 +63,8 @@ class Pin(object):
 
     @resistor.setter
     def resistor(self, resistor):
+        if hasattr(self, '_pin_resistor'):
+            raise AttributeError("'resistor' cannot be modified after Pin object is created")
         if resistor is not None and resistor not in PIN_RESISTORS:
             raise ValueError("'resistor' must be one of: {0}".format(', '.join(PIN_RESISTORS)))
         self._pin_resistor = resistor
