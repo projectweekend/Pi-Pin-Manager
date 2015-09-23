@@ -1,5 +1,6 @@
 import yaml
 
+from pi_pin_manager.settings import LOW, NO_RESISTOR
 from pi_pin_manager.pins import Pin
 
 
@@ -24,7 +25,7 @@ class PinManager(object):
                 message = "'mode' key is missing for pin {0} in config"
                 raise ValueError(message.format(k))
             if 'initial' not in keys:
-                config[k]['initial'] = 'LOW'
+                config[k]['initial'] = LOW
             if 'resistor' not in keys:
-                config[k]['resistor'] = 'PUD_OFF'
+                config[k]['resistor'] = NO_RESISTOR
         return config
