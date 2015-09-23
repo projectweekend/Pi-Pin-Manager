@@ -7,4 +7,5 @@ pi_pin_manager/__init__.py
 pi_pin_manager/manager.py
 pi_pin_manager/mocks.py
 pi_pin_manager/pins.py
+pi_pin_manager/settings.py
 pi_pin_manager/tests.py

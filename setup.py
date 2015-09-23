@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='Pi-Pin-Manager',
-    version='3.0.1',
+    version='3.1.0',
     author='Brian Hines',
     author_email='brian@projectweekend.net',
     packages=['pi_pin_manager'],
