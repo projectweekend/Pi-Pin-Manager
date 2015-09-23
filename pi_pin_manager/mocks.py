@@ -12,6 +12,9 @@ class MockGPIO(object):
         self.PUD_UP = None
         self.PUD_DOWN = None
         self.PUD_OFF = None
+        self.RISING = 'RISING'
+        self.FALLING = 'FALLING'
+        self.BOTH = 'BOTH'
         self._data = defaultdict(int)
 
     def setmode(self, mode):
@@ -28,3 +31,6 @@ class MockGPIO(object):
 
     def setup(self, pin_number, mode, initial, pull_up_down):
         self._data[pin_number] = initial
+
+    def add_event_detect(self, *args, **kwargs):
+        pass

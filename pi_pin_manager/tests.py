@@ -112,6 +112,24 @@ class PinTestCase(unittest.TestCase):
         for pin in pins:
             self.assertTrue(isinstance(pin, Pin))
 
+    def test_attach_action(self):
+        pin = Pin(
+            number=18,
+            mode='OUT',
+            initial='LOW',
+            resistor='PUD_OFF',
+            gpio=self.gpio)
+
+        def my_action(channel):
+            pass
+
+        pin.attach_action(event_type='RISING', action=my_action)
+        pin.attach_action(event_type='FALLING', action=my_action)
+        pin.attach_action(event_type='BOTH', action=my_action)
+
+        # Invalid event type
+        self.assertRaises(ValueError, pin.attach_action, 'NOT_VALID', my_action)
+
 
 class PinManagerTestCase(unittest.TestCase):
 

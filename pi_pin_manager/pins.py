@@ -1,6 +1,11 @@
-PIN_MODES = ('IN', 'OUT', )
-PIN_INITIALS = ('LOW', 'HIGH', )
-PIN_RESISTORS = ('PUD_UP', 'PUD_DOWN', 'PUD_OFF', )
+from pi_pin_manager.settings import (
+    PIN_MODES,
+    PIN_INITIALS,
+    PIN_RESISTORS,
+    PIN_RISING_EVENT,
+    PIN_FALLING_EVENT,
+    PIN_BOTH_EVENT,
+    PIN_EVENT_TYPES)
 
 
 class Pin(object):
@@ -11,7 +16,14 @@ class Pin(object):
         self.initial = initial
         self.resistor = resistor
 
-        self._setup_gpio_channel(gpio)
+        self._gpio = gpio
+        self._setup_gpio_channel()
+
+    def _setup_gpio_channel(self):
+        mode = getattr(self._gpio, self.mode)
+        initial = getattr(self._gpio, self.initial)
+        resistor = getattr(self._gpio, self.resistor)
+        self._gpio.setup(self.number, mode, initial=initial, pull_up_down=resistor)
 
     @classmethod
     def generate_pins(cls, config, gpio):
@@ -71,8 +83,9 @@ class Pin(object):
 
     @property
     def settings(self):
-        return {k.replace('_pin_', ''): v
-                for k, v in self.__dict__.items() if k.startswith('_pin_')}
+        prefix = '_pin_'
+        return {k.replace(prefix, ''): v
+                for k, v in self.__dict__.items() if k.startswith(prefix)}
 
     def read(self):
         return self._gpio.input(self.number)
@@ -83,9 +96,18 @@ class Pin(object):
     def off(self):
         self._gpio.output(self.number, 0)
 
-    def _setup_gpio_channel(self, gpio):
-        self._gpio = gpio
-        mode = getattr(self._gpio, self.mode)
-        initial = getattr(self._gpio, self.initial)
-        resistor = getattr(self._gpio, self.resistor)
-        self._gpio.setup(self.number, mode, initial=initial, pull_up_down=resistor)
+    def attach_action(self, event_type, action, bounce=200):
+        if event_type == PIN_RISING_EVENT:
+            gpio_event = self._gpio.RISING
+        elif event_type == PIN_FALLING_EVENT:
+            gpio_event = self._gpio.FALLING
+        elif event_type == PIN_BOTH_EVENT:
+            gpio_event = self._gpio.BOTH
+        else:
+            message = "'event_type' must be one of: {0}".format(', '.join(PIN_EVENT_TYPES))
+            raise ValueError(message)
+        self._gpio.add_event_detect(
+            self.number,
+            gpio_event,
+            callback=action,
+            bouncetime=bounce)
