@@ -9,13 +9,13 @@ class PinManager(object):
         self._gpio = gpio
         self._gpio.setmode(self._gpio.BCM)
         self._gpio.setwarnings(False)
-        config = self._load_config_from_file(config_file=config_file)
+        config = self._config_from_file(config_file=config_file)
         for pin in Pin.generate_pins(config=config, gpio=self._gpio):
             attribute_name = 'pin_{0}'.format(pin.number)
             setattr(self, attribute_name, pin)
 
     @staticmethod
-    def _load_config_from_file(config_file):
+    def _config_from_file(config_file):
         with open(config_file, 'rb') as f:
             config = yaml.load(f)
         for k, v in config.items():
