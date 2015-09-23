@@ -58,6 +58,15 @@ manager.pin_18.read()
 
 # Settings dictionary for pin 18
 manager.pin_18.settings
+
+
+# Attach an action to pin with threaded callback
+def my_action(channel):
+    # do something here
+    pass
+
+# Valid event types: RISING, FALLING, BOTH
+manager.pin_18.attach_action(event_type='RISING', action=my_action, bounce=200)
 ```
 
 
